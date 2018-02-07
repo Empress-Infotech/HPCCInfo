@@ -27,7 +27,7 @@
 			</iron-label>
 			<paper-dialog-scrollable>
 				<!-- User cannot enter title value beginning with a number -->
-				<paper-input id='ChartTitle' label="Title" required allowed-pattern="^[A-Za-z0-9]+" error-message="Title is Required"></paper-input>
+				<paper-input id='ChartTitle' label="Title" required allowed-pattern="^[a-zA-Z0-9\b]+$" error-message="Title is Required"></paper-input>
 				<paper-input id='dashboardoutputlimit' allowed-pattern="[\d]" label="Output Limit" value="10000"></paper-input>
 				<vaadin-combo-box id='dashboardInputTab' on-value-changed='changeInput' required label="Input Dataset"></vaadin-combo-box>
 				<vaadin-combo-box id='ChartType' required label="Chart Type" items='["bar", "pie","line"]'></vaadin-combo-box>
