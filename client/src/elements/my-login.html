@@ -81,7 +81,7 @@
 		<template is="dom-if" if="{{signedIn}}">
 			<div class="loginBtnDiv">
 				<h6 class="SignInText">Welcome {{user.displayName}}</h6>
-				<paper-menu-button horizontal-align="right" id="profileMenu">
+				<paper-menu-button horizontal-align="right" close-on-activate id="profileMenu">
 					<paper-icon-button icon="arrow-drop-down" slot="dropdown-trigger" class="btn-dropdown"></paper-icon-button>
 					<paper-listbox id="profilemenu" slot="dropdown-content"> 
 						<paper-item hidden$="{{!user.dbauth}}" on-tap="_changePassword">Change Password</paper-item>
