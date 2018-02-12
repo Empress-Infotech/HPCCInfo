@@ -686,9 +686,9 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 		var childCharts = "";
 		var interaction = "";
 		var interactionstatus = false;
-		var parentChartId = event.currentTarget.offsetParent.id;
+		var parentChartId = params.event.event.currentTarget.offsetParent.id; 
 		var parentchartfieldvalue = encodeURIComponent(params.name);
-		var parentChartInteraction=""
+		var parentChartInteraction="";
 		if (currentPage.editor.interactionDetails != null && currentPage.editor.interactionDetails.length > 0) {
 			for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {
 				interaction = currentPage.editor.interactionDetails[i];

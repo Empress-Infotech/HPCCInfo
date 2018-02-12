@@ -232,30 +232,21 @@
                     this.$.toast.open();
                 }
             }
-            OpenEditInteractionPopup() {
-                if (this.$.interactionslist.selectedItems[0] != null) {
-                    var InteractionTitle = this.$.interactionslist.selectedItems[0].InteractionTitle;
-                    var ParentChartTitle = this.$.interactionslist.selectedItems[0].ParentChartTitle;
-                    var ChildChartTitle = this.$.interactionslist.selectedItems[0].ChildChartTitle;
-                    var FilteringField = this.$.interactionslist.selectedItems[0].FilteringField;
-                    var dialog = this.$.editinteractiondialog;
-                    dialog.open(InteractionTitle);
-                }
-                else {
-                    this.$.toast.text = "Please Select an Interaction";
-                    this.$.toast.open();
-                }
+            OpenEditInteractionPopup(e) {
+                var InteractionId=e.model.get('item.InteractionId');
+                var InteractionTitle = e.model.get('item.InteractionTitle');
+                var dialog = this.$.editinteractiondialog;
+                dialog.open(InteractionId,InteractionTitle);
             }
-            DeleteInteractions() {
-                if (this.$.interactionslist.selectedItems[0] != null) {
+            DeleteInteractions(e) {
+                    var InteractionId=e.model.get('item.InteractionId');
                     var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
-                    var currentPage = infoBox.shadowRoot.querySelector('#pages').selectedItem;
-                    var interactionTitle = this.$.interactionslist.selectedItems[0].InteractionTitle;
+                    var currentPage = infoBox.shadowRoot.querySelector('#pages').selectedItem;                   
                     var index;
                     var ChildChartId;
                     for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {
                         var interactionchart = currentPage.editor.interactionDetails[i];
-                        if (interactionchart.InteractionTitle == interactionTitle) {
+                        if (interactionchart.InteractionId === InteractionId) {
                             ChildChartId = interactionchart.ChildChartId;
                             index = i;
                             break;
@@ -272,13 +263,7 @@
                         }
                     }
                     this.$.toast.text = "Interactions Deleted Successfully.";
-                    this.$.toast.open();
-                }
-
-                else {
-                    this.$.toast.text = "Please Select an Interaction";
-                    this.$.toast.open();
-                }
+                    this.$.toast.open();               
             }
         }
         customElements.define(ListInterchartInteractionDialog.is, ListInterchartInteractionDialog);

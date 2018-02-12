@@ -32,7 +32,7 @@
 				<vaadin-combo-box id='ChildChartInput' required label="Child Chart Input"></vaadin-combo-box>
 			</paper-dialog-scrollable>
 			<div class="buttons">
-				<paper-button dialog-confirm raised class="indigo" on-tap="UpdateInteractions">Update Interactions</paper-button>
+				<paper-button  raised class="indigo" on-tap="UpdateInteractions">Update Interactions</paper-button>
 				<paper-button dialog-dismiss raised class="green">Cancel</paper-button>
 			</div>
 		</paper-dialog>
@@ -121,7 +121,7 @@
 				//this.$.dialog.querySelector("#childchartTitle").items = ChildChartsList.split(",");
 				this.$.dialog.querySelector("#ChildChartInput").items = currentPage.editor.displayFields.split(",");
 			}
-			open(interactionTitle) {
+			open(interactionId,interactionTitle) {
 				this.$.interactiontitle.value = interactionTitle;
 				this.$.parentchartTitle.value = "";
 				this.$.ParentChartInput.value = "";
@@ -131,10 +131,11 @@
 				var childChartTitleValue = "";
 
 				var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
+				infoBox.interactionId=interactionId;
 				var currentPage = infoBox.shadowRoot.querySelector('#pages').selectedItem;
 				for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {
 					var interaction = currentPage.editor.interactionDetails[i];
-					if (interaction.InteractionTitle === interactionTitle) {
+					if (interaction.InteractionId === interactionId) {
 						parentChartTitleValue = interaction.ParentChartTitle;
 						childChartTitleValue = interaction.ChildChartTitle;
 						this.parentChartTitle = interaction.ParentChartTitle;
@@ -214,7 +215,7 @@
 
 				for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {
 					var interaction = currentPage.editor.interactionDetails[i];
-					if (interaction.InteractionTitle === interactionTitle) {
+					if (interaction.InteractionId===interactionId) {
 						this.$.dialog.querySelector("#parentchartTitle").selectedItem = interaction.ParentChartTitle;
 						this.$.dialog.querySelector("#ParentChartInput").selectedItem = interaction.FilteringField;
 						this.$.dialog.querySelector("#childchartTitle").selectedItem = interaction.ChildChartTitle;
@@ -224,7 +225,6 @@
 				this.$.dialog.open();
 			}
 			UpdateInteractions(e) {
-				debugger;
 				var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
 				var currentPage = infoBox.shadowRoot.querySelector('#pages').selectedItem;
 				if (this.$.interactiontitle.value != "" && this.$.ParentChartInput.selectedItem != null && this.$.parentchartTitle.selectedItem != null && this.$.childchartTitle.selectedItem != null && this.$.ChildChartInput.selectedItem != null) {
@@ -263,14 +263,14 @@
 						var ChildChartId;
 						for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {
 							var interactionchart = currentPage.editor.interactionDetails[i];
-							if (interactionchart.InteractionTitle === interactionTitle) {
+							if (interactionchart.InteractionId === infoBox.interactionId) {
 								ChildChartId = interactionchart.ChildChartId;
 								index = i;
 								break;
 							}
 						}
 						currentPage.editor.interactionDetails.splice(index, 1);
-						currentPage.editor.interactionDetails.push({ "InteractionTitle": interactionTitle, "ParentChartId": parentChartId, "ParentChartTitle": parentChartTitle, "FilteringField": filteringField, "ChildChartId": childChartId, "ChildChartTitle": childChartTitle, "InteractionFieldvalue": '', "ChildChartType": childChartType, "childchartxcoordinate": childChartxcoordinate, "childchartycoordinate": childchartycoordinate });
+						currentPage.editor.interactionDetails.push({ "InteractionId": infoBox.interactionId,"InteractionTitle": interactionTitle, "ParentChartId": parentChartId, "ParentChartTitle": parentChartTitle, "FilteringField": filteringField, "ChildChartId": childChartId, "ChildChartTitle": childChartTitle, "InteractionFieldvalue": '', "ChildChartType": childChartType, "childchartxcoordinate": childChartxcoordinate, "childchartycoordinate": childchartycoordinate });
 
 						for (var i = 0; i < currentPage.editor.chartDetails.length; i++) {
 							var chart = currentPage.editor.chartDetails[i];
@@ -279,6 +279,7 @@
 								initchart(infoBox.griddata, chart.chartTitle, chart.ChartType, chart.xcoordinate, chart.ycoordinate, chart.ChartId);
 							}
 						}
+						this.$.dialog.close();
 						this.$.toast.text = "Interactions Updated Successfully.";
 						this.$.toast.open();
 					}
