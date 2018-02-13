@@ -26,7 +26,6 @@
 				</div>
 			</iron-label>
 			<paper-dialog-scrollable>
-				<!-- User cannot enter title value beginning with a number -->
 				<paper-input id='TabTitle' label="Chart Title" required  error-message="Title is Required"></paper-input>
 				<paper-input id='filteroutputlimit' allowed-pattern="[\d]" label="Output Limit" value="10000"></paper-input>
 				<vaadin-combo-box id='filterInputTab' on-value-changed='changeInput' required label="Input Dataset"></vaadin-combo-box>
