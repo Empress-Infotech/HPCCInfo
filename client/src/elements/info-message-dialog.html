@@ -72,36 +72,38 @@
                 var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
                 infoBox.editChartStatus=true;
                 var currentPage =infoBox.shadowRoot.querySelector("#pages").selectedItem;                
-                var index;
+                var index=[];
+                var k = 0;
                 var isParentChart = 0;
                 var ChildChartId;
+                var childCharts = [];
                 var chartId = 'Chart' + this.ChartId.replace('edit', '');
                     for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {                        
                         var interactionchart = currentPage.editor.interactionDetails[i];
-                        if (interactionchart.ChildChartId === chartId) {
-                            sessionStorage.setItem('ChartId', chartId);
-                            index = i;
-                            break;
+                        if (interactionchart.ParentChartId === chartId || interactionchart.ChildChartId === chartId) {
+                            index[k] = i;
+                            k++;
                         }
-                        else if(interactionchart.ParentChartId === chartId){
+                        if (interactionchart.ParentChartId === chartId) {
                             isParentChart = 1;
-                            ChildChartId=interactionchart.ChildChartId;
-                            sessionStorage.setItem('ChartId', ChildChartId);
-                            index = i;
-                            break;
+                            childCharts.push(interactionchart.ChildChartId);
                         }
                     } 
-                    currentPage.editor.interactionDetails.splice(index, 1);
-                    if (isParentChart == 1) {
+                    for (var i = index.length - 1; i >= 0; i--)
+                    currentPage.editor.interactionDetails.splice(index[i], 1);
+                    if (isParentChart === 1) {
                     for (var i = 0; i < currentPage.editor.chartDetails.length; i++) {
-                        var chart = currentPage.editor.chartDetails[i];                       
-                            if (chart.ChartId === ChildChartId) {
+                        var chart = currentPage.editor.chartDetails[i];  
+                            for (var j = 0; j < childCharts.length; j++) {
+                            if (chart.ChartId == childCharts[j]) {
+                                sessionStorage.setItem('ChartId', childCharts[j]);
                                 chart.chartTitle = chart.chartTitle.replace(/ *\([^)]*\) */g, "");
-								initchart(infoBox.griddata, chart.chartTitle, chart.ChartType, chart.xcoordinate, chart.ycoordinate, chart.ChartId);
-                                break;
-                            }                        
+                               initchart(infoBox.griddata, chart.chartTitle, chart.ChartType, chart.xcoordinate, chart.ycoordinate, chart.ChartId);
+                               break;
+                            }
+                        }                     
                     }
-                }                
+                }   
                 currentPage.shadowRoot.querySelector('#newchart').open(this.ChartId);              
             }
             handleCancel(e) {
