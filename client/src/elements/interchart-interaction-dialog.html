@@ -169,6 +169,7 @@
 						}
 						currentPage.shadowRoot.querySelector("#Chart" + chart.ChartId.replace('Chart', '')).innerHTML = "";
 						currentPage.editor.interactionDetails.push({ "InteractionId": interactionId, "InteractionTitle": interactionTitle, "ParentChartId": parentChartId, "ParentChartTitle": parentChartTitle, "FilteringField": filteringField, "ChildChartId": childChartId, "ChildChartTitle": childChartTitle, "InteractionFieldvalue": '', "ChildChartType": childChartType, "childchartxcoordinate": childChartxcoordinate, "childchartycoordinate": childchartycoordinate });
+						this.$.dialog.close();
 						this.$.toast.text = "Interactions Added Successfully.";
 						this.$.toast.open();
 					}
