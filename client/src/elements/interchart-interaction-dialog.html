@@ -32,7 +32,7 @@
 				<vaadin-combo-box id='ChildChartInput' required label="Child Chart Input"></vaadin-combo-box>
 			</paper-dialog-scrollable>
 			<div class="buttons">
-				<paper-button dialog-confirm raised class="indigo" on-tap="AddInteractions">Add Interactions</paper-button>
+				<paper-button  raised class="indigo" on-tap="AddInteractions">Add Interactions</paper-button>
 				<paper-button dialog-dismiss raised class="green">Cancel</paper-button>
 			</div>
 		</paper-dialog>
@@ -147,7 +147,7 @@
 						var childChartType;
 						var childChartxcoordinate;
 						var childchartycoordinate;
-
+						var interactionId ="intr" + Math.random().toString(36).substr(2, 4);
 						for (var i = 0; i < currentPage.editor.chartDetails.length; i++) {
 							var chart = currentPage.editor.chartDetails[i];
 							if (chart.chartTitle === this.$.parentchartTitle.selectedItem) {
@@ -169,7 +169,7 @@
 							}
 						}
 						currentPage.shadowRoot.querySelector("#Chart" + chart.ChartId.replace('Chart', '')).innerHTML = "";
-						currentPage.editor.interactionDetails.push({ "InteractionTitle": interactionTitle, "ParentChartId": parentChartId, "ParentChartTitle": parentChartTitle, "FilteringField": filteringField, "ChildChartId": childChartId, "ChildChartTitle": childChartTitle, "InteractionFieldvalue": '', "ChildChartType": childChartType, "childchartxcoordinate": childChartxcoordinate, "childchartycoordinate": childchartycoordinate });
+						currentPage.editor.interactionDetails.push({ "InteractionId": interactionId, "InteractionTitle": interactionTitle, "ParentChartId": parentChartId, "ParentChartTitle": parentChartTitle, "FilteringField": filteringField, "ChildChartId": childChartId, "ChildChartTitle": childChartTitle, "InteractionFieldvalue": '', "ChildChartType": childChartType, "childchartxcoordinate": childChartxcoordinate, "childchartycoordinate": childchartycoordinate });
 						this.$.toast.text = "Interactions Added Successfully.";
 						this.$.toast.open();
 					}
