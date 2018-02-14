@@ -462,8 +462,9 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 		var deleteButton = document.createElement("paper-icon-button");
 		deleteButton.classList.add('chartEdit');
 		deleteButton.id = "delete" + randomNumber;
-		deleteButton.icon = "delete"
-		deleteButton.addEventListener('tap', (e) => currentPage.deleteChart(e));
+
+		deleteButton.icon = "delete";
+		deleteButton.addEventListener('tap',  (e) => infoBox.shadowRoot.querySelector('#deletemessage').open(e,chartTitle));
 		Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + chartHeadRightId)).appendChild(deleteButton);
 
 		var divColumn = document.createElement("div");
@@ -479,7 +480,7 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 		chartDiv.classList.add('chartDiv');
 		chartDiv.style = "width:100%;float:left;";
 		Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + divColumnId)).appendChild(chartDiv);
-
+    
 		if (Id == "")
 			currentPage.editor.chartDetails.push({ "ChartId": chartId, "ChartType": charttype, "xcoordinate": xcoordinate, "ycoordinate": ycoordinate, "chartTitle": chartTitle });
 		this.myChart = echarts.init(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId).querySelector("#" + chartId));
@@ -509,9 +510,26 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 		else {
 			var divId = 'divChart' + graphId.replace('Chart', '');;
 			var divColumnId = 'divColumn' + graphId.replace('Chart', '');;
+
+			if (currentPage.shadowRoot.querySelector("#" + divId) == null) {
+				var divChart = document.createElement("div");
+				divChart.id = divId;
+				divChart.classList.add('divChart');
+				Polymer.dom(currentPage.shadowRoot.querySelector('#divDashboard')).appendChild(divChart);
+
+				var divColumn = document.createElement("div");
+
+				divColumn.id = divColumnId;
+				divColumn.classList.add('divColumn');
+				divColumn.style = "height:400px;";
+
+				Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId)).appendChild(divColumn);
+			}
+
 			var chartHeadLeftId = 'chartHeadLeft' + graphId.replace('Chart', '');
 			var chartHeadLeft = currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + chartHeadLeftId);
 			chartHeadLeft.innerText = chartTitle;
+
 			var chartDiv = document.createElement("div");
 
 			if (currentPage.shadowRoot.querySelector("#" + graphId) != null)
@@ -521,6 +539,21 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 			chartDiv.classList.add('chartDiv');
 			chartDiv.style = "width:100%; float:left;";
 			Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + divColumnId)).appendChild(chartDiv);
+
+			var editButton = document.createElement("paper-icon-button");
+			editButton.classList.add('chartEdit');
+			editButton.id = "edit" + graphId.replace('Chart', '');
+			editButton.icon = "create"
+			editButton.addEventListener('tap', (e) => currentPage.editChart(e));
+			Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(editButton);
+
+			var deleteButton = document.createElement("paper-icon-button");
+			deleteButton.classList.add('chartEdit');
+			deleteButton.id = "delete" + graphId.replace('Chart', '');
+			deleteButton.icon = "delete"
+			deleteButton.addEventListener('tap', (e) => infoBox.shadowRoot.querySelector('#deletemessage').open(e,chartTitle));
+			Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(deleteButton);
+
 		}
 
 		this.myChart = echarts.init(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId).querySelector("#" + graphId));

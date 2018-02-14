@@ -39,6 +39,7 @@
 				<paper-button dialog-dismiss raised class="green">Cancel</paper-button>
 			</div>
 		</paper-dialog>
+	
 	</template>
 	<script>
 		class CommonDashBoardEditor extends Polymer.Element {
@@ -304,7 +305,7 @@
 									deleteButton.classList.add('chartEdit');
 									deleteButton.id = "delete" + Id;
 									deleteButton.icon = "delete"
-									deleteButton.addEventListener('tap', (e) => currentPage.deleteChart(e));
+									deleteButton.addEventListener('tap', (e) => infoBox.shadowRoot.querySelector('#deletemessage').open(id, title));
 									Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + chartHeadRightId)).appendChild(deleteButton);
 
 									var divColumn = document.createElement("div");
@@ -319,7 +320,6 @@
 									chartDiv.classList.add('chartDiv');
 									chartDiv.style = "width:100%;float:left;";
 									Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + divColumnId)).appendChild(chartDiv);
-
 
 								}
 								else {
