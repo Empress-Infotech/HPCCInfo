@@ -2,7 +2,7 @@
 
 <dom-module id="interchart-delete-message">
            
-<template is="dom-if" if="{{!intr}}">
+<template>
         <style include="shared-dialog-styles">
                 paper-dialog {
                     min-height: 150px;
@@ -35,7 +35,7 @@
         <div class="container">
             <iron-label>
                 <div class="head"  id="divTitle"></div>
-              <div class="text">Are you sure you want to delete this chart?</div>
+              <div class="text">{{intrMsg}}</div>
             </iron-label>
           
         </div>
@@ -64,8 +64,31 @@
             }
             open(e,Title) {
                 this.ChartId=e.target.id;
-                this.$.divTitle.innerHTML=Title;                
-				this.$.dialog.open();
+                this.$.divTitle.innerHTML=Title; 
+                var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
+					var currentPage = infoBox.shadowRoot.querySelector('#pages').selectedItem;
+					var JSON = currentPage.editor.interactionDetails;
+					if (JSON.length > 0) {
+						for (var index = 0; index < JSON.length; ++index) {
+							var interaction = JSON[index];
+							var chartId = 'Chart' + this.ChartId.replace('delete', '');
+							if (interaction.ChildChartId === chartId) {
+								
+								this.intrMsg = "An Interaction is applied to this chart. If you continue, interaction will be lost and you need to set the interaction again.\n Do you really want to delete "+Title+" ?";         
+				                this.$.dialog.open();
+								break;
+							}
+							else {
+								this.intrMsg = "Do you really want to delete "+Title+" ?";         
+				                this.$.dialog.open();
+							}
+						}
+					}
+					else {
+						this.intrMsg = "Do you really want to delete "+Title+" ?";         
+				        this.$.dialog.open();
+					}      
+                
 				
             }
             handleOk(e) {

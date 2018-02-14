@@ -305,7 +305,7 @@
 									deleteButton.classList.add('chartEdit');
 									deleteButton.id = "delete" + Id;
 									deleteButton.icon = "delete"
-									deleteButton.addEventListener('tap', (e) => infoBox.shadowRoot.querySelector('#deletemessage').open(id, title));
+									deleteButton.addEventListener('tap', (e) => infoBox.shadowRoot.querySelector('#deletemessage').open(e, chart.chartTitle));
 									Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + chartHeadRightId)).appendChild(deleteButton);
 
 									var divColumn = document.createElement("div");
