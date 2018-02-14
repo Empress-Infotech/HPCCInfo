@@ -394,7 +394,6 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 	var ycoordinatefield = ycoordinate;
 	var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
 	var currentPage = infoBox.shadowRoot.querySelector('#pages').selectedItem;
-	//var salesdata = [];
 	legendarray = [];
 	var yAxisarray = [];
 	var myArray = griditems;
@@ -433,41 +432,54 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 		divChart.classList.add('divChart');
 		Polymer.dom(currentPage.shadowRoot.querySelector('#divDashboard')).appendChild(divChart);
 
-		var divColumn = document.createElement("div");
-		var divColumnId = 'divColumn' + randomNumber;
-		divColumn.id = divColumnId;
-		divColumn.classList.add('divColumn');
-		divColumn.style = "height:400px;";
+		var chartHead = document.createElement("div");
+		var chartHeadId = 'chartHead' + randomNumber;
+		chartHead.id = chartHeadId;
+		chartHead.classList.add('chartHead');
+		Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId)).appendChild(chartHead);
 
-		Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId)).appendChild(divColumn);
+		var chartHeadLeft = document.createElement("div");
+		var chartHeadLeftId = 'chartHeadLeft' + randomNumber;
+		chartHeadLeft.id = chartHeadLeftId;
+		chartHeadLeft.innerText = chartTitle;
+		chartHeadLeft.classList.add('chartHeadLeft');
+		Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + chartHeadId)).appendChild(chartHeadLeft);
 
-		var chartDiv = document.createElement("div");
-		var chartId = 'Chart' + randomNumber;
-		chartDiv.id = chartId;
-		chartDiv.classList.add('chartDiv');
-		chartDiv.style = "width:850px;height:400px;float:left;";
-		if ($(window).width() < 1600) { chartDiv.style = "width:650px;height:400px;float:left;" };
-		if ($(window).width() < 1400) { chartDiv.style = "width:555px;height:400px;float:left;" };
-		if ($(window).width() < 1200) { chartDiv.style = "width:460px;height:400px;float:left;" };
-		if ($(window).width() < 1024) { chartDiv.style = "width:830px;height:400px;float:left;" };
-		if ($(window).width() < 992) { chartDiv.style = "width:690px;height:400px;float:left;" };
-		if ($(window).width() < 768) { chartDiv.style = "width:550px;height:400px;float:left;" };
-		if ($(window).width() < 640) { chartDiv.style = "width:380px;height:400px;float:left;" };
-		Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + divColumnId)).appendChild(chartDiv);
+		var chartHeadRight = document.createElement("div");
+		var chartHeadRightId = 'chartHeadRight' + randomNumber;
+		chartHeadRight.id = chartHeadRightId;
+		chartHeadRight.classList.add('chartHeadRight');
+		Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + chartHeadId)).appendChild(chartHeadRight);
+
 
 		var editButton = document.createElement("paper-icon-button");
 		editButton.classList.add('chartEdit');
 		editButton.id = "edit" + randomNumber;
 		editButton.icon = "create"
 		editButton.addEventListener('tap', (e) => currentPage.editChart(e));
-		Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(editButton);
+		Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + chartHeadRightId)).appendChild(editButton);
 
 		var deleteButton = document.createElement("paper-icon-button");
 		deleteButton.classList.add('chartEdit');
 		deleteButton.id = "delete" + randomNumber;
 		deleteButton.icon = "delete"
 		deleteButton.addEventListener('tap', (e) => currentPage.deleteChart(e));
-		Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(deleteButton);
+		Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + chartHeadRightId)).appendChild(deleteButton);
+
+		var divColumn = document.createElement("div");
+		var divColumnId = 'divColumn' + randomNumber;
+		divColumn.id = divColumnId;
+		divColumn.classList.add('divColumn');
+		Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId)).appendChild(divColumn);
+
+
+		var chartDiv = document.createElement("div");
+		var chartId = 'Chart' + randomNumber;
+		chartDiv.id = chartId;
+		chartDiv.classList.add('chartDiv');
+		chartDiv.style = "width:100%;float:left;";
+		Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + divColumnId)).appendChild(chartDiv);
+
 		if (Id == "")
 			currentPage.editor.chartDetails.push({ "ChartId": chartId, "ChartType": charttype, "xcoordinate": xcoordinate, "ycoordinate": ycoordinate, "chartTitle": chartTitle });
 		this.myChart = echarts.init(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId).querySelector("#" + chartId));
@@ -476,6 +488,12 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 		if (Id == "") {
 			var divId = 'divChart' + graphId.replace('Chart', '');
 			var divColumnId = 'divColumn' + graphId.replace('Chart', '');
+			var chartHeadLeftId = 'chartHeadLeft' + graphId.replace('Chart', '');
+
+			var chartHeadLeft = currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + chartHeadLeftId);
+
+			chartHeadLeft.innerText = chartTitle;
+
 			for (var i = 0; i < currentPage.editor.chartDetails.length; i++) {
 				var chart = currentPage.editor.chartDetails[i];
 				if (chart.ChartId == graphId) {
@@ -486,63 +504,23 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 					break;
 				}
 			}
+
 		}
 		else {
 			var divId = 'divChart' + graphId.replace('Chart', '');;
 			var divColumnId = 'divColumn' + graphId.replace('Chart', '');;
-			if (currentPage.shadowRoot.querySelector("#" + divId) == null) {
-				var divChart = document.createElement("div");
-				divChart.id = divId;
-				divChart.classList.add('divChart');
-				Polymer.dom(currentPage.shadowRoot.querySelector('#divDashboard')).appendChild(divChart);
-
-				var divColumn = document.createElement("div");
-
-				divColumn.id = divColumnId;
-				divColumn.classList.add('divColumn');
-				divColumn.style = "height:400px;";
-
-				Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId)).appendChild(divColumn);
-			}
-
-
-
+			var chartHeadLeftId = 'chartHeadLeft' + graphId.replace('Chart', '');
+			var chartHeadLeft = currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + chartHeadLeftId);
+			chartHeadLeft.innerText = chartTitle;
 			var chartDiv = document.createElement("div");
-			var divId = 'divChart' + graphId.replace('Chart', '');
 
 			if (currentPage.shadowRoot.querySelector("#" + graphId) != null)
 				currentPage.shadowRoot.querySelector('#' + divId).querySelector("#" + divColumnId).removeChild(currentPage.shadowRoot.querySelector("#" + graphId));
-			if (currentPage.shadowRoot.querySelector("#edit" + graphId.replace('Chart', '')) != null)
-				currentPage.shadowRoot.querySelector('#' + divId).querySelector("#" + divColumnId).removeChild(currentPage.shadowRoot.querySelector("#edit" + graphId.replace('Chart', '')));
-			if (currentPage.shadowRoot.querySelector("#delete" + graphId.replace('Chart', '')) != null)
-				currentPage.shadowRoot.querySelector('#' + divId).querySelector("#" + divColumnId).removeChild(currentPage.shadowRoot.querySelector("#delete" + graphId.replace('Chart', '')));
-
+			
 			chartDiv.id = graphId;
 			chartDiv.classList.add('chartDiv');
-			chartDiv.style = "width:850px;height:400px;float:left;";
-			if ($(window).width() < 1600) { chartDiv.style = "width:650px;height:400px;float:left;" };
-			if ($(window).width() < 1400) { chartDiv.style = "width:555px;height:400px;float:left;" };
-			if ($(window).width() < 1200) { chartDiv.style = "width:460px;height:400px;float:left;" };
-			if ($(window).width() < 1024) { chartDiv.style = "width:830px;height:400px;float:left;" };
-			if ($(window).width() < 992) { chartDiv.style = "width:690px;height:400px;float:left;" };
-			if ($(window).width() < 768) { chartDiv.style = "width:550px;height:400px;float:left;" };
-			if ($(window).width() < 640) { chartDiv.style = "width:380px;height:400px;float:left;" };
+			chartDiv.style = "width:100%; float:left;";
 			Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + divColumnId)).appendChild(chartDiv);
-
-			var editButton = document.createElement("paper-icon-button");
-			editButton.classList.add('chartEdit');
-			editButton.id = "edit" + graphId.replace('Chart', '');
-			editButton.icon = "create"
-			editButton.addEventListener('tap', (e) => currentPage.editChart(e));
-			Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(editButton);
-
-			var deleteButton = document.createElement("paper-icon-button");
-			deleteButton.classList.add('chartEdit');
-			deleteButton.id = "delete" + graphId.replace('Chart', '');
-			deleteButton.icon = "delete"
-			deleteButton.addEventListener('tap', (e) => currentPage.deleteChart(e));
-			Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(deleteButton);
-
 		}
 
 		this.myChart = echarts.init(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId).querySelector("#" + graphId));
@@ -556,7 +534,7 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 		// option for pie chart
 		var option = {
 			title: {
-				text: chartTitle,
+				//text: chartTitle,
 				subtext: xcoordinatefield + " - " + ycoordinatefield + " Chart",
 				x: 'center'
 			},
@@ -609,7 +587,7 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 		// option for bar chart
 		var option = {
 			title: {
-				text: chartTitle,
+				//text: chartTitle,
 				subtext: xcoordinatefield + " - " + ycoordinatefield + " Chart",
 				x: 'center'
 			},
@@ -661,6 +639,10 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 					}
 				}
 			},
+			grid: {
+				width: '90%',
+				x: '80'
+			},
 			calculable: true,
 			series: [{
 				name: 'Sales',
@@ -688,12 +670,12 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 		var interactionstatus = false;
 		var parentChartId = params.event.event.currentTarget.offsetParent.id; 
 		var parentchartfieldvalue = encodeURIComponent(params.name);
-		var parentChartInteraction="";
+		var parentChartInteraction = ""
 		if (currentPage.editor.interactionDetails != null && currentPage.editor.interactionDetails.length > 0) {
 			for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {
 				interaction = currentPage.editor.interactionDetails[i];
 				if (interaction.ParentChartId == parentChartId) {
-					parentChartInteraction=interaction;
+					parentChartInteraction = interaction;
 					interactionstatus = true;
 					interaction.InteractionFieldvalue = parentchartfieldvalue;
 					childCharts = childCharts + interaction.ChildChartId;

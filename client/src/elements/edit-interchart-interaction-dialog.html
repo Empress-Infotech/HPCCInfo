@@ -256,7 +256,7 @@
 								break;
 							}
 						}
-						currentPage.shadowRoot.querySelector("#divColumn" + chart.ChartId.replace('Chart', '')).innerHTML = "";
+						currentPage.shadowRoot.querySelector("#Chart" + chart.ChartId.replace('Chart', '')).innerHTML = "";
 						var index;
 						var ChildChartId;
 						for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {
@@ -274,6 +274,7 @@
 						for (var i = 0; i < currentPage.editor.chartDetails.length; i++) {
 							var chart = currentPage.editor.chartDetails[i];
 							if (chart.ChartId === ChildChartId) {
+								sessionStorage.setItem('ChartId', chart.ChartId);
 								chart.chartTitle = chart.chartTitle.replace(/ *\([^)]*\) */g, "");
 								initchart(infoBox.griddata, chart.chartTitle, chart.ChartType, chart.xcoordinate, chart.ycoordinate, chart.ChartId);
 							}
