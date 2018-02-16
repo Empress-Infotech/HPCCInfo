@@ -26,16 +26,16 @@
 				</div>
 			</iron-label>
 			<paper-dialog-scrollable>
-				<paper-input id='TabTitle' label="Chart Title" required  error-message="Title is Required"></paper-input>
+				<paper-input id='TabTitle' label="Chart Title" required error-message="Title is Required"></paper-input>
 				<paper-input id='filteroutputlimit' allowed-pattern="[\d]" label="Output Limit" value="10000"></paper-input>
-				<vaadin-combo-box id='filterInputTab' on-value-changed='changeInput' required label="Input Dataset"></vaadin-combo-box>
+				<vaadin-combo-box id='filterInputTab' on-value-changed='changeInput' required label="Input Dataset" error-message="Input Dataset Required"></vaadin-combo-box>
 
-				<vaadin-combo-box id='ChartType' required label="Chart Type" items='["bar", "pie","line"]'></vaadin-combo-box>
-				<vaadin-combo-box id='xcoordinate' required label="x-coordinate" items='[]'></vaadin-combo-box>
-				<vaadin-combo-box id='ycoordinate' required label="y-coordinate"></vaadin-combo-box>
+				<vaadin-combo-box id='ChartType' required label="Chart Type" items='["bar", "pie","line"]' error-message="Chart type Required"></vaadin-combo-box>
+				<vaadin-combo-box id='xcoordinate' required label="x-coordinate" items='[]' error-message="X-Coordinate Required"></vaadin-combo-box>
+				<vaadin-combo-box id='ycoordinate' required label="y-coordinate" error-message="Y-Coordinate is Required"></vaadin-combo-box>
 			</paper-dialog-scrollable>
 			<div class="buttons">
-				<paper-button dialog-confirm raised class="indigo" on-tap="_okHandler">Ok</paper-button>
+				<paper-button raised class="indigo" on-tap="_okHandler">Ok</paper-button>
 				<paper-button dialog-dismiss raised class="green">Cancel</paper-button>
 			</div>
 		</paper-dialog>
@@ -191,28 +191,49 @@
 				currentPage.outputdsname = 'filterdsName' + '_' + Math.random().toString(36).substr(2, 4);
 
 				var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('info-box');
+				if( this.$.TabTitle.value && this.$.ChartType.selectedItem && this.$.xcoordinate.selectedItem && this.$.ycoordinate.selectedItem)
+				{
+					
+					
+						this.outputdsname = currentPage.outputdsname;
+					var QueryStr1 = this.inputeclcode + "\n" + currentPage.outputdsname + " := " +
+						this.inputdsname + " : PERSIST(\'" + currentPage.outputdsname + "_persist\', EXPIRE(1));";
 
-				this.outputdsname = currentPage.outputdsname;
-				var QueryStr1 = this.inputeclcode + "\n" + currentPage.outputdsname + " := " +
-					this.inputdsname + " : PERSIST(\'" + currentPage.outputdsname + "_persist\', EXPIRE(1));";
+					var QueryStr = QueryStr1 + "\n OUTPUT(" + (currentPage.outputdsname) + ");";
 
-				var QueryStr = QueryStr1 + "\n OUTPUT(" + (currentPage.outputdsname) + ");";
+					var eclIP = (infoBox.isHpccSecured === "true" ? "https://" : "http://") +
+						infoBox.cluster_address +
+						":" + infoBox.port;
 
-				var eclIP = (infoBox.isHpccSecured === "true" ? "https://" : "http://") +
-					infoBox.cluster_address +
-					":" + infoBox.port;
+					currentPage.eclcode = QueryStr1;
 
-				currentPage.eclcode = QueryStr1;
+					this.inputTab = this.$.filterInputTab.value;
 
-				this.inputTab = this.$.filterInputTab.value;
+					this.eclcode = QueryStr1;
 
-				this.eclcode = QueryStr1;
+					currentPage.chartTitle = this.$.TabTitle.value;
+					currentPage.selectedchartyype = this.$.ChartType.selectedItem;
+					currentPage.selectedxcoordinate = this.$.xcoordinate.selectedItem;
+					currentPage.selectedycoordinate = this.$.ycoordinate.selectedItem;
+					this.$.dialog.close();
+					this.$.toast.text = "Chart is added Successfully.";
+					this.$.toast.open();
+					return loadGridwithEcl(QueryStr, this.$.filteroutputlimit.value);
+					
+				}
+				else{
+					
+					this.$.TabTitle.validate();
+					this.$.ChartType.validate(); 
+					this.$.xcoordinate.validate(); 
+					this.$.ycoordinate.validate(); 
 
-				currentPage.chartTitle = this.$.TabTitle.value;
-				currentPage.selectedchartyype = this.$.ChartType.selectedItem;
-				currentPage.selectedxcoordinate = this.$.xcoordinate.selectedItem;
-				currentPage.selectedycoordinate = this.$.ycoordinate.selectedItem;
-				return loadGridwithEcl(QueryStr, this.$.filteroutputlimit.value);
+					this.$.toast.text = "Please fill all fields.";
+					this.$.toast.open();
+					this.$.dialog.open();
+					
+				}			
+							
 			}
 			_cancelHandler(e) {
 				this.fire('cancel');
