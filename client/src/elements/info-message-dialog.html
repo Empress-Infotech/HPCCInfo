@@ -71,39 +71,7 @@
             handleOk(e) {
                 var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
                 infoBox.editChartStatus=true;
-                var currentPage =infoBox.shadowRoot.querySelector("#pages").selectedItem;                
-                var index=[];
-                var k = 0;
-                var isParentChart = 0;
-                var ChildChartId;
-                var childCharts = [];
-                var chartId = 'Chart' + this.ChartId.replace('edit', '');
-                    for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {                        
-                        var interactionchart = currentPage.editor.interactionDetails[i];
-                        if (interactionchart.ParentChartId === chartId || interactionchart.ChildChartId === chartId) {
-                            index[k] = i;
-                            k++;
-                        }
-                        if (interactionchart.ParentChartId === chartId) {
-                            isParentChart = 1;
-                            childCharts.push(interactionchart.ChildChartId);
-                        }
-                    } 
-                    for (var i = index.length - 1; i >= 0; i--)
-                    currentPage.editor.interactionDetails.splice(index[i], 1);
-                    if (isParentChart === 1) {
-                    for (var i = 0; i < currentPage.editor.chartDetails.length; i++) {
-                        var chart = currentPage.editor.chartDetails[i];  
-                            for (var j = 0; j < childCharts.length; j++) {
-                            if (chart.ChartId == childCharts[j]) {
-                                sessionStorage.setItem('ChartId', childCharts[j]);
-                                chart.chartTitle = chart.chartTitle.replace(/ *\([^)]*\) */g, "");
-                               initchart(infoBox.griddata, chart.chartTitle, chart.ChartType, chart.xcoordinate, chart.ycoordinate, chart.ChartId);
-                               break;
-                            }
-                        }                     
-                    }
-                }   
+                var currentPage =infoBox.shadowRoot.querySelector("#pages").selectedItem;                 
                 currentPage.shadowRoot.querySelector('#newchart').open(this.ChartId);              
             }
             handleCancel(e) {
