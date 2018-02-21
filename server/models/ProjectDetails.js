@@ -33,9 +33,9 @@ var ProjectDetails = {
 				  projectDetails.dateupdated,
 				   projectDetails.file], callback);
 		},
-
-		deleteProject: function(title, callback){
-			return mysql_pool.query('DELETE FROM projectdetails WHERE title = ?', [title], callback);
+		deleteProject: function(projectDetails, callback){
+			//return mysql_pool.query('DELETE FROM projectdetails WHERE title = ?', [title], callback);
+			return mysql_pool.query('DELETE FROM projectdetails WHERE projectid = ? and title = ?', [projectDetails.ProjectId,projectDetails.ProjectTitle], callback);			
 		}
 };
 

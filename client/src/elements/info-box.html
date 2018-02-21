@@ -15,6 +15,8 @@
 <link rel="import" href="info-plugin-dialog.html">
 <link rel="import" href="info-message-dialog.html">
 <link rel="import" href="interchart-delete-message.html">
+<link rel="import" href="delete-workbook-message.html">
+
 <!-- Import Custom Plugins here -->
 <link rel="import" href="plugins/input/editor.html">
 <link rel="import" href="plugins/input/view.html">
@@ -105,7 +107,9 @@
         <iron-pages id="pages" selected="{{selected}}"></iron-pages>
         <info-plugin-dialog id="plugininfo"></info-plugin-dialog>
         <info-message-dialog id="messageinfo"></info-message-dialog>
-        <interchart-delete-message id="deletemessage" interaction = "{{interaction}}"></interchart-delete-message>
+        <interchart-delete-message id="deletemessage" interaction = "{{interaction}}"></interchart-delete-message>        
+        <delete-workbook-message id="deleteworkbookmsg"></delete-workbook-message>
+        
     </template>
     <script>
         class InfoBox extends Polymer.Element {
