@@ -71,7 +71,7 @@
             handleOk(e) {
                 var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
                 infoBox.editChartStatus=true;
-                var currentPage =infoBox.shadowRoot.querySelector("#pages").selectedItem;
+                var currentPage =infoBox.shadowRoot.querySelector("#pages").selectedItem;                 
                 currentPage.shadowRoot.querySelector('#newchart').open(this.ChartId);              
             }
             handleCancel(e) {

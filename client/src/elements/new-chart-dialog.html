@@ -35,8 +35,10 @@
 				<vaadin-combo-box id='ycoordinate' required label="y-coordinate" error-message="Y-Coordinate is Required"></vaadin-combo-box>
 			</paper-dialog-scrollable>
 			<div class="buttons">
-				<paper-button raised class="indigo" on-tap="_okHandler">Ok</paper-button>
-				<paper-button dialog-dismiss raised class="green">Cancel</paper-button>
+
+				<paper-button dialog-confirm raised class="indigo" on-tap="_okHandler">Ok</paper-button>
+				<paper-button dialog-dismiss raised class="green" >Cancel</paper-button>
+
 			</div>
 		</paper-dialog>
 		<paper-toast id="toast" class="fit-bottom"></paper-toast>
@@ -60,7 +62,9 @@
 					selectedxcoordinate: String,
 					selectedycoordinate: String,
 					inputTab: String,
-					heading :String
+					heading :String,
+					ChartId:String
+					
 				}
 			}
 			constructor() {
@@ -82,6 +86,8 @@
 				this.selectedxcoordinate = '';
 				this.selectedycoordinate = '';
 				this.inputTab = '';
+				this.ChartId='';
+				
 				//Style for vaadin-combobox				
 				this.$.xcoordinate.$.overlay.shadowRoot.querySelector('#dropdown').shadowRoot.querySelector('#overlay').shadowRoot.querySelector('#content').style.padding = 0;
 			}
@@ -89,6 +95,7 @@
 				var pages = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('info-box').shadowRoot.querySelector("#tabs");
 				var tabnames = "";
 				var inputidx = 0;
+				this.ChartId=id;
 				var papertabs = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('info-box').shadowRoot.querySelector('app-toolbar').getElementsByTagName("paper-tab");
 				for (var cnt = 0; cnt < papertabs.length; cnt++) {
 					if (pages.selectedItem.id === papertabs[cnt].id) {
@@ -122,6 +129,7 @@
 							this.$.ChartType.selectedItem = chart.ChartType;
 							this.$.xcoordinate.selectedItem = chart.xcoordinate;
 							this.$.ycoordinate.selectedItem = chart.ycoordinate;
+							this.selectedxcoordinate= chart.xcoordinate;
 							break;
 						}
 					}
@@ -138,6 +146,11 @@
 								var title = interaction.ChildChartTitle + " ( Filtered By " + interaction.InteractionFieldvalue.replace(/%20/g, " ") + " )";
 								infoBox.shadowRoot.querySelector('#messageinfo').open(id, title);
 								break;
+							}
+							else if(interaction.ParentChartId === chartId){
+								var title = interaction.ParentChartTitle;
+								infoBox.shadowRoot.querySelector('#messageinfo').open(id, title);
+								break;	
 							}
 							else {
 								this.$.dialog.open();
@@ -172,7 +185,7 @@
 						this.expression = jsonTabContent.expression;
 						this.inputTab = jsonTabContent.inputTab;
 						this.$.filterInputTab.value = jsonTabContent.inputdsname;
-
+					
 						break;
 					}
 				}
@@ -185,7 +198,58 @@
 			}
 
 			_okHandler(e) {
-				this.title = this.$.TabTitle.value;
+				var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
+				var isValidInteraction = 0;
+				if(infoBox.editChartStatus){
+				var currentPage =infoBox.shadowRoot.querySelector("#pages").selectedItem;                
+                var index=[];
+                var k = 0;
+                var isParentChart = 0;				
+                var ChildChartId;
+                var childCharts = [];
+                var chartId = 'Chart' + this.ChartId.replace('edit', '');
+                    for (var i = 0; i < currentPage.editor.interactionDetails.length; i++) {                        
+                        var interactionchart = currentPage.editor.interactionDetails[i];
+                        if (interactionchart.ChildChartId === chartId) {					
+							isValidInteraction=1;
+							if(this.inputTab!=this.$.filterInputTab.selectedItem){
+							index[k] = i;
+							k++;
+							isValidInteraction=0;
+						   }							
+                        }
+                        if (interactionchart.ParentChartId === chartId) {
+							isParentChart = 1;
+							
+							if(this.inputTab!=this.$.filterInputTab.selectedItem || this.$.xcoordinate.selectedItem !=this.selectedxcoordinate){
+							index[k] = i;
+							k++;
+							childCharts.push(interactionchart.ChildChartId);
+							}
+                        }
+                    } 
+                    for (var i = index.length - 1; i >= 0; i--){					
+						currentPage.editor.interactionDetails.splice(index[i], 1);
+					}
+                   
+                    if (isParentChart === 1) {
+                    for (var i = 0; i < currentPage.editor.chartDetails.length; i++) {
+                        var chart = currentPage.editor.chartDetails[i];  
+                            for (var j = 0; j < childCharts.length; j++) {
+                            if (chart.ChartId == childCharts[j]) {
+                                sessionStorage.setItem('ChartId', childCharts[j]);
+                                chart.chartTitle = chart.chartTitle.replace(/ *\([^)]*\) */g, "");
+                               initchart(infoBox.griddata, chart.chartTitle, chart.ChartType, chart.xcoordinate, chart.ycoordinate, chart.ChartId);
+                               break;
+							}														
+							
+                        }                     
+					}
+					sessionStorage.setItem('ChartId', chartId);
+                }   
+				}
+				if(isValidInteraction===0){
+					this.title = this.$.TabTitle.value;
 				var currentPage = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('info-box').shadowRoot.querySelector("#pages").selectedItem;
 
 				currentPage.outputdsname = 'filterdsName' + '_' + Math.random().toString(36).substr(2, 4);
@@ -227,15 +291,15 @@
 					this.$.ChartType.validate(); 
 					this.$.xcoordinate.validate(); 
 					this.$.ycoordinate.validate(); 
-
 					this.$.toast.text = "Please fill all fields.";
 					this.$.toast.open();
 					this.$.dialog.open();
 					
 				}			
-							
+
 			}
 			_cancelHandler(e) {
+		
 				this.fire('cancel');
 			}
 			changeInput(event) {

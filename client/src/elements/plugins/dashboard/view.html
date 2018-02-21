@@ -165,6 +165,8 @@
             editChart(e) {
                 var dialog = this.$.newchart;
                 var id = e.target.id;
+                var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
+                infoBox.editChartStatus = false;
                 dialog.open(id);
             }
             deleteChart(e) {
