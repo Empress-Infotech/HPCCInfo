@@ -52,8 +52,19 @@ router.post('/', function(req, res, next){
     });
 });
 
-router.delete('/:name',function(req, res, next){
-	ProjectDetails.deleteProject(req.params.name, function(err, count) {
+// router.delete('/:name',function(req, res, next){
+// 	ProjectDetails.deleteProject(req.params.name, function(err, count) {
+// 	    if(err) {
+// 	    	logger.error("REQUEST URL: "+req.url+" , REQUEST IP:  "+ req.ip +", RESPONSE STATUS CODE: " +res.statusCode);
+// 			logger.error("ERROR MESSAGE: "+ err);
+// 	        res.json(err);
+// 	    } else {
+// 	        res.json(count);
+// 	    }
+//     });
+// });
+router.delete('/:ProjectId',function(req, res, next){
+	ProjectDetails.deleteProject(req.body, function(err, count) {
 	    if(err) {
 	    	logger.error("REQUEST URL: "+req.url+" , REQUEST IP:  "+ req.ip +", RESPONSE STATUS CODE: " +res.statusCode);
 			logger.error("ERROR MESSAGE: "+ err);
@@ -63,6 +74,5 @@ router.delete('/:name',function(req, res, next){
 	    }
     });
 });
-
 //Return router
 module.exports = router;

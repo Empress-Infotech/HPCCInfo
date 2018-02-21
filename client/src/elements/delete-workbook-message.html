@@ -1,0 +1,78 @@
+<link rel="import" href="shared-styles.html">
+<dom-module id="delete-workbook-message">           
+<template>
+        <style include="shared-dialog-styles">
+                paper-dialog {
+                    min-height: 150px;
+                }
+                paper-dialog .container {
+                    width: 500px;
+                    padding: 0;
+                    margin: 0;
+                }
+                .head {
+                    font-weight: bold;
+                    font-size: 20px;
+                    padding-bottom: 10px;
+                    background: #4caf50;
+                    color: #fff;
+                    padding: 15px 20px;
+                }
+                .text {
+                    line-height: 1.6;
+                    color: #333;
+                    font-size: 15px;
+                    padding: 20px;
+                    border-bottom: 1px solid #eee;
+                }
+                .buttons {
+                    padding: 15px 15px 15px;
+                }
+            </style>
+    <paper-dialog id="dialog" modal>
+        <div class="container">
+            <iron-label>
+                <div class="head">Delete Workbook</div>
+              <div class="text">Do you really want to delete this workbook?</div>
+            </iron-label>
+          
+        </div>
+        <div class="buttons">
+            <paper-button dialog-confirm raised class="indigo" on-tap="handleOk">Yes</paper-button>
+            <paper-button dialog-dismiss raised class="green" on-tap="handleCancel">No</paper-button>
+        </div>
+    </paper-dialog>
+</template>
+    <script>
+        class deleteworkbookmessage extends Polymer.Element {
+            static get is() { return 'delete-workbook-message'; }
+            static get properties() {
+                return {
+                    ProjectId: {
+                        type: String
+                    }                   
+                }
+            }
+            constructor() {
+                super();
+            }
+            ready() {
+                super.ready();
+            }
+            open(ProjectId) {    
+                this.ProjectId=ProjectId;           
+                this.$.dialog.open();	
+            }
+            handleOk() {  
+                var currentPage = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#openwork');
+                currentPage.DeleteProject(this.ProjectId);
+            }
+            handleCancel(e) {
+                this.dispatchEvent(new CustomEvent('cancel', { bubbles: true, composed: true }));
+            }
+
+        }
+        customElements.define(deleteworkbookmessage.is, deleteworkbookmessage);
+    </script>
+
+</dom-module>
