@@ -1,0 +1,111 @@
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="interchart-delete-message">
+           
+<template>
+        <style include="shared-dialog-styles">
+                paper-dialog {
+                    min-height: 150px;
+                }
+                paper-dialog .container {
+                    width: 500px;
+                    padding: 0;
+                    margin: 0;
+                }
+                .head {
+                    font-weight: bold;
+                    font-size: 20px;
+                    padding-bottom: 10px;
+                    background: #4caf50;
+                    color: #fff;
+                    padding: 15px 20px;
+                }
+                .text {
+                    line-height: 1.6;
+                    color: #333;
+                    font-size: 15px;
+                    padding: 20px;
+                    border-bottom: 1px solid #eee;
+                }
+                .buttons {
+                    padding: 15px 15px 15px;
+                }
+            </style>
+    <paper-dialog id="dialog" modal>
+        <div class="container">
+            <iron-label>
+                <div class="head"  id="divTitle"></div>
+              <div class="text">{{intrMsg}}</div>
+            </iron-label>
+          
+        </div>
+        <div class="buttons">
+            <paper-button dialog-confirm raised class="indigo" on-tap="handleOk">Yes</paper-button>
+            <paper-button dialog-dismiss raised class="green" on-tap="handleCancel">No</paper-button>
+        </div>
+    </paper-dialog>
+</template>
+    <script>
+        class interchartdeletemessage extends Polymer.Element {
+            static get is() { return 'interchart-delete-message'; }
+
+            static get properties() {
+                return {
+                    ChartId: {
+                        type: String
+                    },                   
+                }
+            }
+            constructor() {
+                super();
+            }
+            ready() {
+                super.ready();
+            }
+            open(e,Title) {
+                this.ChartId=e.target.id;
+                this.$.divTitle.innerHTML=Title; 
+                var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
+					var currentPage = infoBox.shadowRoot.querySelector('#pages').selectedItem;
+					var JSON = currentPage.editor.interactionDetails;
+					if (JSON.length > 0) {
+						for (var index = 0; index < JSON.length; ++index) {
+							var interaction = JSON[index];
+							var chartId = 'Chart' + this.ChartId.replace('delete', '');
+							if (interaction.ChildChartId === chartId) {
+								
+								this.intrMsg = "An Interaction is applied to this chart. If you continue, interaction will be lost and you need to set the interaction again.\n Do you really want to delete "+Title+" ?";         
+				                this.$.dialog.open();
+								break;
+							}
+							else {
+								this.intrMsg = "Do you really want to delete "+Title+" ?";         
+				                this.$.dialog.open();
+							}
+						}
+					}
+					else {
+						this.intrMsg = "Do you really want to delete "+Title+" ?";         
+				        this.$.dialog.open();
+					}      
+                
+				
+            }
+            handleOk(e) {
+                e.target.id = this.ChartId;
+                var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');                
+                var currentPage =infoBox.shadowRoot.querySelector('#pages').selectedItem;
+                currentPage.deleteChart(e);
+
+            }
+            handleCancel(e) {
+                var infoBox = document.querySelector('my-app').shadowRoot.querySelector('hpcc-info-app').shadowRoot.querySelector('#infobox');
+                infoBox.editChartStatus=false;
+                this.dispatchEvent(new CustomEvent('cancel', { bubbles: true, composed: true }));
+            }
+
+        }
+        customElements.define(interchartdeletemessage.is, interchartdeletemessage);
+    </script>
+
+</dom-module>

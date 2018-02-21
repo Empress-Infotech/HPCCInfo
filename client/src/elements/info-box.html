@@ -14,6 +14,7 @@
 <link rel="import" href="../../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="info-plugin-dialog.html">
 <link rel="import" href="info-message-dialog.html">
+<link rel="import" href="interchart-delete-message.html">
 <!-- Import Custom Plugins here -->
 <link rel="import" href="plugins/input/editor.html">
 <link rel="import" href="plugins/input/view.html">
@@ -104,6 +105,7 @@
         <iron-pages id="pages" selected="{{selected}}"></iron-pages>
         <info-plugin-dialog id="plugininfo"></info-plugin-dialog>
         <info-message-dialog id="messageinfo"></info-message-dialog>
+        <interchart-delete-message id="deletemessage" interaction = "{{interaction}}"></interchart-delete-message>
     </template>
     <script>
         class InfoBox extends Polymer.Element {
@@ -174,22 +176,7 @@
                         type: Map,
                         value: {}
                     },
-                    charttype: {
-                        type: String,
-                        value: null
-                    },
-                    xcoordinate: {
-                        type: String,
-                        value: null
-                    },
-                    ycoordinate: {
-                        type: String,
-                        value: null
-                    },
                     TabsList: {
-                        type: Array
-                    },
-                    chartDtls: {
                         type: Array
                     },
                     griddata: {
@@ -203,64 +190,13 @@
                         type: Boolean,
                         value: false
                     },
-                    parentchartinput: {
-                        type: String,
-                        value: null
-                    },
-                    parentchartfield: {
-                        type: String,
-                        value: null
-                    },
-                    parentchartfieldvalue: {
-                        type: String,
-                        value: null
-                    },
-                    parentchartId: {
-                        type: String,
-                        value: null
-                    },
-                    parentchartTitle: {
-                        type: String,
-                        value: null
-                    },
-                    filtereddata: {
-                        type: Array
-                    },
-                    childchartId: {
-                        type: String,
-                        value: null
-                    },
-                    childchartTitle: {
-                        type: String,
-                        value: null
-                    },
-                    childchartType: {
-                        type: String,
-                        value: null
-                    },
-                    childchartxcoordinate: {
-                        type: String,
-                        value: null
-                    },
-                    childchartycoordinate: {
-                        type: String,
-                        value: null
-                    },
-                    IsInteraction: {
-                        type: Number,
-                        value: 0
-                    },
-                    interactiontitle: {
-                        type: String,
-                        value: null
-                    },
-                    filteredcharttitle: {
-                        type: String,
-                        value: null
-                    },
                     editChartStatus: {
                         type: Boolean,
                         value: false
+                    },
+                interaction:{
+                    type:Boolean,
+                    value : true
                     }
 
                 }
