@@ -61,6 +61,8 @@
             </paper-dialog-scrollable>
 
             <div class="buttons">
+                    <iron-a11y-keys id="a11y" target="[[target]]" keys="enter"
+                    on-keys-pressed="onEnter"></iron-a11y-keys>
                 <paper-button raised class="indigo" on-tap="_addNewTab">Ok</paper-button>
                 <paper-button dialog-dismiss raised class="green" on-tap="handleCancel">Cancel</paper-button>
             </div>
@@ -330,7 +332,6 @@
                 this.$.httpSecured.invalid = false;
                 this.$.clusternames.invalid = false;
             }
- 
         }
         customElements.define(NewWorksheetDialog.is, NewWorksheetDialog);
 

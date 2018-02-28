@@ -254,7 +254,8 @@
                     <div class="form-field mb-0">
                         <div class="col-row">
                             <div class="col-6">
-                                <paper-button raised class="btn btn-color" on-tap="Register">Register</paper-button>
+                                    <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="onEnter"></iron-a11y-keys>
+                                <paper-button raised class="btn btn-color"  on-tap="Register">Register</paper-button>
                             </div>
                             <div class="col-6">
                                 <paper-button dialog-dismiss raised class="btn btn-grey" on-tap="handleCancel">Cancel</paper-button>
