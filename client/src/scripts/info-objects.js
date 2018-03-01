@@ -207,7 +207,7 @@ function loadGridwithEcl(QueryStr, recLimit, extenderQueryStr = "") {
 			if (ChildChartIds != "" && ChildChartIds != null)
 				ChildChartId = ChildChartIds.split(',');
 			if (ChildChartId.length > 0) {
-				for (var i = 0; i < ChildChartId.length; i++) {
+				for (var i = 0; i < ChildChartId.length; i++) {					
 					sessionStorage.setItem('ChartId', ChildChartId[i]);
 					for (var j = 0; j < currentPage.editor.interactionDetails.length; j++) {
 						interaction = currentPage.editor.interactionDetails[j];
@@ -224,6 +224,7 @@ function loadGridwithEcl(QueryStr, recLimit, extenderQueryStr = "") {
 				sessionStorage.setItem('ChildChartIds', "");
 			}
 			else {
+				
 				//var ChartId = sessionStorage.getItem('ChartId');
 				initchart(ajaxResp.Result.Row, currentPage.chartTitle, currentPage.selectedchartyype, currentPage.selectedxcoordinate, currentPage.selectedycoordinate, "");
 			}
@@ -540,19 +541,19 @@ function initchart(griditems, chartTitle, charttype, xcoordinate, ycoordinate, I
 			chartDiv.style = "width:100%; float:left;";
 			Polymer.dom(currentPage.shadowRoot.querySelector('#' + divId).querySelector('#' + divColumnId)).appendChild(chartDiv);
 
-			var editButton = document.createElement("paper-icon-button");
-			editButton.classList.add('chartEdit');
-			editButton.id = "edit" + graphId.replace('Chart', '');
-			editButton.icon = "create"
-			editButton.addEventListener('tap', (e) => currentPage.editChart(e));
-			Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(editButton);
+			// var editButton = document.createElement("paper-icon-button");
+			// editButton.classList.add('chartEdit');
+			// editButton.id = "edit" + graphId.replace('Chart', '');
+			// editButton.icon = "create"
+			// editButton.addEventListener('tap', (e) => currentPage.editChart(e));
+			// Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(editButton);
 
-			var deleteButton = document.createElement("paper-icon-button");
-			deleteButton.classList.add('chartEdit');
-			deleteButton.id = "delete" + graphId.replace('Chart', '');
-			deleteButton.icon = "delete"
-			deleteButton.addEventListener('tap', (e) => infoBox.shadowRoot.querySelector('#deletemessage').open(e,chartTitle));
-			Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(deleteButton);
+			// var deleteButton = document.createElement("paper-icon-button");
+			// deleteButton.classList.add('chartEdit');
+			// deleteButton.id = "delete" + graphId.replace('Chart', '');
+			// deleteButton.icon = "delete"
+			// deleteButton.addEventListener('tap', (e) => infoBox.shadowRoot.querySelector('#deletemessage').open(e,chartTitle));
+			//Polymer.dom(currentPage.shadowRoot.querySelector("#" + divId).querySelector('#' + divColumnId)).appendChild(deleteButton);
 
 		}
 
